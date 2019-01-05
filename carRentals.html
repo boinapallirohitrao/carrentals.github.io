@@ -17,7 +17,7 @@
     width: 100%;
     background: url('https://themesjungle.net/html/prime-cab/images/banner1_bg.jpg') no-repeat;
     background-size: cover;
-    padding: 195px 0;
+    padding: 140px 0;
     position: relative;
 }
 .trip-outer {
@@ -29,6 +29,12 @@
 .trip-outer .trip-type-tabs {
     width: 100%;
     float: left;
+    background: #dd3751;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 400;
 }
 .trip-type-tabs .nav-tabs li a {
     font-family: 'Montserrat',sans-serif;
@@ -42,10 +48,15 @@
     border: none;
 }
 .trip-outer .tab-content {
-    width: 95.5%;
+    width: 100%;
     background-color: #fff;
     float: left;
-    padding: 40px 30px;
+    padding: 40px 30px 15px;
+}
+button.search-btn.disabled {
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: .65;
 }
 .trip_form .field-outer, .trip-type-frm .field-outer {
     float: left;
@@ -84,6 +95,8 @@
     margin: 25px 0 0;
     float: left;
     cursor: pointer;
+    background-color:#dd3751;
+    margin-bottom: 20px
 }
 .tj-banner-form:after {
     position: absolute;
@@ -137,8 +150,6 @@ border: 2px solid #fff;
     margin-left: 8px;
     padding: 13px 0;
 }   
-button.search-btn{   
-     background-color: #dd3751;}
 
      form.ng-valid.ng-dirty {
     display: none;
@@ -170,7 +181,7 @@ button.search-btn{
             <div class="col-md-6 col-xs-12 mx-auto">
                 <div class="trip-outer">
                     <div class="trip-type-tabs">
-                        Make Your Ride
+                        Make Your Ride with skybooker
                     </div>
                     <!--Banner Tab Content Start-->
                     <div class="tab-content">
@@ -182,25 +193,35 @@ button.search-btn{
                                 </div>
                                 <div class="field-outer">
                                     <span class="fas fa-search"></span>
-                                    <input type="text"  id="address" name="drop_loc" placeholder="Drop Location">
+                                    <input type="text"  id="map2" name="drop_loc" placeholder="Drop Location">
                                 </div>
                                 <div class="field-outer">
                                     <span class="fas fa-calendar-alt"></span>
                                    
-                                    <input type="text" id="caleran-ex-6-5-start" placeholder="Start Date"/>
+                                    <input type="text" class="calendar" id="caleran-ex-6-5-start" placeholder="Start Date"/>
                                 </div>
                                 <div class="field-outer">
                                     <span class="fas fa-calendar-alt"></span>
-                                    <input type="text" id="caleran-ex-6-5-end" placeholder="End Date"/>
+                                    <input type="text" class="calendar" id="caleran-ex-6-5-end" placeholder="End Date"/>
                                     
                                 </div>
                                 <!-- <div class="field-outer">
                                     <input type="checkbox" name="promo_code" id="promo_code">
                                     <label for="promo_code">I Have Promotional Code</label>
                                 </div> -->
-                                <button type="submit" class="search-btn">Search Cabs <i class="fa fa-arrow-circle-right" aria-hidden="true"></i></button>	
+                                <button type="submit" class="search-btn">Search Cabs <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                
+                    
+                                </button>	
                             </form>
-                            <!--Banner Form Content End-->
+
+                            <div id="loading" style="display: none;text-align: center;margin-top: 20px;">
+                                <span>We are processing your request</span><i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color: red;font-size: 20px;"></i>
+                                <span class="sr-only">Loading...</span>
+                              </div>
+
+                              <!--  grey circle  -->
+                     <!--Banner Form Content End-->
                     </div>
                     <!--Banner Tab Content End-->
                 </div>
@@ -212,9 +233,9 @@ button.search-btn{
 
 
 
-<div id="rc-connect-container"></div> 
+<!-- <div id="rc-connect-container"></div> 
 
-<script id='rc-connect' src='https://www.rentalcars.com/partners/integrations/connect/connect.js' data-container='rc-connect-container' data-preflang='en' data-enable-return-checkbox='true' data-rcid='skybooker584'></script>
+<script id='rc-connect' src='https://www.rentalcars.com/partners/integrations/connect/connect.js' data-container='rc-connect-container' data-preflang='en' data-enable-return-checkbox='true' data-rcid='skybooker584'></script> -->
 
 
 
@@ -227,14 +248,20 @@ button.search-btn{
 
 $('button.search-btn').click(function(){
 
-    if($('input#map').val() == ''){
+    if($('input#map').val() == '' || $('input.calendar').val() == ''){
         alert('Please Fill the field');
         return false;
-        $('form[name=test]').attr('action','https://www.rentalcars.com/SearchResults.do?locationName=Las+Palmas+Airport&dropLocationName=Las+Palmas+Airport&country=Spain+-+Canary+Islands&dropCountry=Spain+-+Canary+Islands&city=Gran+Canaria&dropCity=Gran+Canaria&location=3591&dropLocation=3591&puDay=11&puMonth=1&puYear=2019&doDay=13&doMonth=1&doYear=2019&puHour=10&puMinute=0&doHour=10&doMinute=0&driversAge=35&page=SearchResults.do&affiliateCode=lonelyplanet&cor=gb&preflang=en&prefcurrency=usd');
+    }
+
+    jQuery("#loading").show();
+    $('button.search-btn').addClass('disabled');
+
+    $('form[name=test]').attr('action','https://www.rentalcars.com/SearchResults.do?locationName=Las+Palmas+Airport&dropLocationName=Las+Palmas+Airport&country=Spain+-+Canary+Islands&dropCountry=Spain+-+Canary+Islands&city=Gran+Canaria&dropCity=Gran+Canaria&location=3591&dropLocation=3591&puDay=11&puMonth=1&puYear=2019&doDay=13&doMonth=1&doYear=2019&puHour=10&puMinute=0&doHour=10&doMinute=0&driversAge=35&page=SearchResults.do&affiliateCode=lonelyplanet&cor=gb&preflang=en&prefcurrency=usd');
 
 $('form[name=test]').submit();
 
-    }
+
+
 
 
  
@@ -251,6 +278,8 @@ $('form[name=test]').submit();
 
 <script type="text/javascript">
     
+
+
     var startDate, endDate, startInstance, endInstance;
     var fillInputs = function () {
         startInstance.$elem.val(startDate ? startDate.locale(startInstance.config.format).format(startInstance.config.format) : "");
@@ -353,7 +382,9 @@ $('form[name=test]').submit();
 
 function getGooglePlaces(){
 var input = document.getElementById('map');
+var input2 = document.getElementById('map2');
 var autocomplete1 = new google.maps.places.Autocomplete(input);
+var autocomplete2 = new google.maps.places.Autocomplete(input2);
 }
 
 </script>
